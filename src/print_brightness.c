@@ -43,7 +43,6 @@ void print_brightness(yajl_gen json_gen, char *buffer, const char *format) {
 #if defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(linux) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__APPLE__) || defined(sun) || defined(__DragonFly__)
     double loadavg[3];
     const char *selected_format = format;
-    const char *walk;
     bool colorful_output = false;
 
     if (getloadavg(loadavg, 3) == -1)
