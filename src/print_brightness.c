@@ -40,13 +40,8 @@ static char *apply_brightness_format(const char *fmt, char *outwalk, int ibright
 void print_brightness(yajl_gen json_gen, char *buffer, const char *format) {
     char *outwalk = buffer;
 
-#if defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(linux) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__APPLE__) || defined(sun) || defined(__DragonFly__)
-    double loadavg[3];
     const char *selected_format = format;
     bool colorful_output = false;
-
-    if (getloadavg(loadavg, 3) == -1)
-        goto error;
 
     // TODO: put your path to brightness files here
     char *path = "/sys/class/backlight/intel_backlight/";
@@ -72,8 +67,4 @@ void print_brightness(yajl_gen json_gen, char *buffer, const char *format) {
     OUTPUT_FULL_TEXT(buffer);
 
     return;
-error:
-#endif
-    OUTPUT_FULL_TEXT("cant read load");
-    (void)fputs("i3status: Cannot read system load using getloadavg()\n", stderr);
 }
