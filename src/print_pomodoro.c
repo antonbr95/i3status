@@ -53,7 +53,7 @@ void print_pomodoro(yajl_gen json_gen, char *buffer, const char *format, const c
     }
     else if (mode == 1) {
         selected_format = format_pomo;
-        START_COLOR("color_bad");
+        START_COLOR("color_degraded");
     }
     else if (mode == 2) {
         selected_format = format_break;

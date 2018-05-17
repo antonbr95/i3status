@@ -12,9 +12,10 @@
 int read_number_from_file(char * filename){
 	
     FILE *f = fopen(filename, "r");
-	char number_str[5];
-	fgets(number_str, 5, f);
-	return atoi(number_str);
+    char number_str[5];
+    fgets(number_str, 5, f);
+    fclose(f);
+    return atoi(number_str);
 }
 
 static char *apply_brightness_format(const char *fmt, char *outwalk, int ibrightness) {
