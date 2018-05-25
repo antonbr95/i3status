@@ -499,6 +499,16 @@ int main(int argc, char *argv[]) {
         CFG_END()
     };
 
+    cfg_opt_t weather_opts[] = {
+        CFG_STR("format", "%day %icon %temperature", CFGF_NONE),
+        CFG_CUSTOM_ALIGN_OPT,
+        CFG_CUSTOM_COLOR_OPTS,
+        CFG_CUSTOM_MIN_WIDTH_OPT,
+        CFG_CUSTOM_SEPARATOR_OPT,
+        CFG_CUSTOM_SEP_BLOCK_WIDTH_OPT,
+        CFG_END()
+    };
+
     cfg_opt_t opts[] = {
         CFG_STR_LIST("order", "{}", CFGF_NONE),
         CFG_SEC("general", general_opts, CFGF_NONE),
@@ -518,6 +528,7 @@ int main(int argc, char *argv[]) {
         CFG_SEC("cpu_usage", usage_opts, CFGF_NONE),
         CFG_SEC("brightness", brightness_opts, CFGF_NONE),
         CFG_SEC("pomodoro", pomodoro_opts, CFGF_NONE),
+        CFG_SEC("weather", weather_opts, CFGF_NONE),
         CFG_END()};
 
     char *configfile = NULL;
@@ -801,6 +812,12 @@ int main(int argc, char *argv[]) {
             CASE_SEC("pomodoro") {
                 SEC_OPEN_MAP("pomodoro");
                 print_pomodoro(json_gen, buffer, cfg_getstr(sec, "format"), cfg_getstr(sec, "format_pomo"), cfg_getstr(sec, "format_break"));
+                SEC_CLOSE_MAP;
+            }
+
+            CASE_SEC("weather") {
+                SEC_OPEN_MAP("weather");
+                print_weather(json_gen, buffer, cfg_getstr(sec, "format"));
                 SEC_CLOSE_MAP;
             }
 
