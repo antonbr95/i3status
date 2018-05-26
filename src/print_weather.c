@@ -19,7 +19,7 @@ void read_string_from_file(char * filename, char * out){
 }
 
 static char *apply_weather_format(const char *fmt, char *outwalk, char * day, char * icon, 
-                                  char * temperature) {
+                                  char * temperature, char * weather_string) {
     const char *walk = fmt;
 
     for (; *walk != '\0'; walk++) {
@@ -42,6 +42,10 @@ static char *apply_weather_format(const char *fmt, char *outwalk, char * day, ch
         if (BEGINS_WITH(walk + 1, "temperature")) {
             outwalk += sprintf(outwalk, "%s", temperature);
             walk += strlen("temperature");
+        }
+        if (BEGINS_WITH(walk + 1, "weather_string")) {
+            outwalk += sprintf(outwalk, "%s", weather_string);
+            walk += strlen("weather_string");
         }
     }
     return outwalk;
@@ -79,8 +83,14 @@ void print_weather(yajl_gen json_gen, char *buffer, const char *format) {
 	char temperature[256];
     read_string_from_file(temperature_filename, temperature);
 
+	// read temperature
+    char weather_string_filename[256];
+    sprintf(weather_string_filename, "%sweather_string", path);
+	char weather_string[256];
+    read_string_from_file(weather_string_filename, weather_string);
+
 	// sprintf(buffer, "%d", percentage);
-    outwalk = apply_weather_format(selected_format, outwalk, day, icon, temperature);
+    outwalk = apply_weather_format(selected_format, outwalk, day, icon, temperature, weather_string);
 
     if (colorful_output)
         END_COLOR;
