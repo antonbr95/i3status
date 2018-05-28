@@ -29,6 +29,15 @@ static char *apply_pomodoro_format(const char *fmt, char *outwalk, int pomo_minu
             else outwalk += sprintf(outwalk, "%d", pomo_seconds);
             walk += strlen("seconds");
         }
+
+        if (BEGINS_WITH(walk + 1, "earth_turning")) {
+            char *earth = malloc(strlen("🌎"));
+            if(pomo_seconds % 3 == 0) earth = "🌍";
+            else if (pomo_seconds % 3 == 1) earth = "🌏";
+            else if (pomo_seconds % 3 == 2) earth = "🌎";
+            outwalk += sprintf(outwalk, "%s", earth);
+            walk += strlen("earth_turning");
+        }
     }
     return outwalk;
 }
