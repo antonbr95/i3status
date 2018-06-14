@@ -2,6 +2,7 @@
 from time import sleep
 from bs4 import BeautifulSoup
 import urllib3 
+import sys
 urllib3.disable_warnings()
 
 def write_day(s):
@@ -37,6 +38,9 @@ def write_icon(s):
 	# alt = regnerisch
 	elif 'regnerisch' in s:
 		icon = '🌧'
+	# alt = Dauerregen
+	elif 'Dauerregen' in s:
+		icon = '🌧 🌧'
 	else:
 		# TODO: find out other names
 		icon = s
@@ -52,10 +56,10 @@ def write_weather_string(s):
 	f.write(s)
 	f.close()
 
-http = urllib3.PoolManager()
-url = 'http://www.srf.ch/meteo'
+def get_weather():
+	http = urllib3.PoolManager()
+	url = 'http://www.srf.ch/meteo'
 
-while True:
 	meteo_html = http.request('GET', url)
 	soup = BeautifulSoup(meteo_html.data, 'lxml')
 
@@ -82,5 +86,9 @@ while True:
 			write_weather_string(tag['alt'])
 			break
 
-	# wait one minute
-	sleep(600)
+if len(sys.argv) == 1:
+	get_weather()
+elif len(sys.argv) > 1 and sys.argv[1] == 'loop':
+	while True:
+		get_weather()
+		sleep(600)
