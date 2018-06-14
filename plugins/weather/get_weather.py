@@ -3,21 +3,22 @@ from time import sleep
 from bs4 import BeautifulSoup
 import urllib3 
 import sys
+import os
 urllib3.disable_warnings()
 
-def write_day(s):
-	print("writing to day")
-	f = open('day', 'w')
+def write_day(s, path):
+	print("writing to " + path + "day")
+	f = open(path + 'day', 'w')
 	f.write(s)
 	f.close()
 	
-def write_temperature(s):
+def write_temperature(s, path):
 	print("writing to temperature")
-	f = open('temperature', 'w')
+	f = open(path + 'temperature', 'w')
 	f.write(s)
 	f.close()
 
-def write_icon(s):
+def write_icon(s, path):
 	icon = ''
 	# alt = ziemlich sonnig
 	if 'ziemlich sonnig' in s:
@@ -46,13 +47,13 @@ def write_icon(s):
 		icon = s
 		print('after else: s = "' + s + '"')
 	print("writing to icon: " + icon)
-	f = open('icon', 'w')
+	f = open(path + 'icon', 'w')
 	f.write(icon)
 	f.close()
 
-def write_weather_string(s):
+def write_weather_string(s, path):
 	print("writing to weather_string")
-	f = open('weather_string', 'w')
+	f = open(path + 'weather_string', 'w')
 	f.write(s)
 	f.close()
 
@@ -63,27 +64,34 @@ def get_weather():
 	meteo_html = http.request('GET', url)
 	soup = BeautifulSoup(meteo_html.data, 'lxml')
 
+	# get path
+	path = __file__
+	path_length = path.rfind('/')
+	path = path[:path_length + 1] 
+	print('path after: ' + path)
+	# path is now the absolute path to the directory of this .py file ending with '/'
+
 	for tag in soup.find_all('span'):
 		#print('test = "' + tag.text + '"')
 		tmp = tag.text.replace('\xa0', ' ')
 		set = tmp.split(' ')
 		if ('Heute' in set):
 			print (set)
-			write_day('Heute')
+			write_day('Heute', path)
 			continue
 		if ('Morgen' in set):
 			print (set)
-			write_day('Morgen')
+			write_day('Morgen', path)
 			continue
 		print(set)
-		write_temperature(set[0])
+		write_temperature(set[0], path)
 		break
 
 	for tag in soup.find_all('img'):
 		if 'SRF Meteo' in tag['title']:
 			print('reading weather info for icon: ' + tag['alt'])
-			write_icon(tag['alt'])
-			write_weather_string(tag['alt'])
+			write_icon(tag['alt'], path)
+			write_weather_string(tag['alt'], path)
 			break
 
 if len(sys.argv) == 1:
