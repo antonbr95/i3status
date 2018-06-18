@@ -7,13 +7,11 @@ import os
 urllib3.disable_warnings()
 
 def write_day(s, path):
-	print("writing to " + path + "day")
 	f = open(path + 'day', 'w')
 	f.write(s)
 	f.close()
 	
 def write_temperature(s, path):
-	print("writing to temperature")
 	f = open(path + 'temperature', 'w')
 	f.write(s)
 	f.close()
@@ -25,7 +23,6 @@ def write_icon(s, path):
 		icon = '🌤'
 	# alt = Sonne und Wolken im Wechsel
 	elif 'Sonne und Wolken im Wechsel' in s:
-		print('s = "' + s + '"')
 		icon = '🌥'
 	# alt = sonnig
 	elif 'sonnig' in s:
@@ -45,14 +42,12 @@ def write_icon(s, path):
 	else:
 		# TODO: find out other names
 		icon = s
-		print('after else: s = "' + s + '"')
 	print("writing to icon: " + icon)
 	f = open(path + 'icon', 'w')
 	f.write(icon)
 	f.close()
 
 def write_weather_string(s, path):
-	print("writing to weather_string")
 	f = open(path + 'weather_string', 'w')
 	f.write(s)
 	f.close()
@@ -68,11 +63,9 @@ def get_weather():
 	path = __file__
 	path_length = path.rfind('/')
 	path = path[:path_length + 1] 
-	print('path after: ' + path)
 	# path is now the absolute path to the directory of this .py file ending with '/'
 
 	for tag in soup.find_all('span'):
-		#print('test = "' + tag.text + '"')
 		tmp = tag.text.replace('\xa0', ' ')
 		set = tmp.split(' ')
 		if ('Heute' in set):
