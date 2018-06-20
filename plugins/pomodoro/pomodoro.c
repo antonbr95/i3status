@@ -40,8 +40,6 @@ void main(int argc, char *argv[]){
 		fclose(secs_file);
 	}
 
-	printf("starting timer\n");
-
 	// start timer
 	while (mins >= 0){
 		while (secs > 0){
